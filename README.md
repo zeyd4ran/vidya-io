@@ -131,7 +131,7 @@ Clone the repository and install dependencies:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/VIDHYA-AI.git
+git clone https://github.com/zeyd4ran/vidya-io.git
 cd VIDHYA-AI/VIDHYA-AI
 
 # Install dependencies
