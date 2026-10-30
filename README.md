@@ -11,7 +11,7 @@
 
 ---
 
-## 📑 Table of Contents
+##  Table of Contents
 
 1. [Overview & Value Proposition](#-overview--value-proposition)
 2. [Key Features](#-key-features)
@@ -38,7 +38,7 @@
 
 ---
 
-## 🌟 Overview & Value Proposition
+##  Overview & Value Proposition
 
 Online self-learning, especially through video platforms like YouTube, frequently fails due to three fundamental obstacles:
 1. **Distraction**: Algorithmic recommendations, comment sections, and unrelated media derail focus.
@@ -55,36 +55,36 @@ Online self-learning, especially through video platforms like YouTube, frequentl
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
-### 🎓 24×7 AI Tutor & Live SSE Streaming
+###  24×7 AI Tutor & Live SSE Streaming
 - Ask complex academic doubts with instant streaming responses via Server-Sent Events (`/api/ai/doubt/stream`).
 - AI daily insights dynamically personalized using current study streaks and productivity ratings.
 
-### 🎥 FocusLearn Distraction-Free Video Engine
+###  FocusLearn Distraction-Free Video Engine
 - YouTube privacy-enhanced embed (`youtube-nocookie.com`) with related videos and branding stripped.
 - Auto-saving transcript and notes editor that preserves typing cursor and caret positions without re-rendering.
 - **Snapshot Bot**: Ask questions or paste frame screenshots (<kbd>Ctrl</kbd>+<kbd>V</kbd>) for instant visual analysis.
 
-### 🧠 Knowledge Gap Detection & Concept Normalization
+### Knowledge Gap Detection & Concept Normalization
 - Concept names are automatically normalized (punctuation-stripped, trimmed, lowercased) so `"Newton's Laws"` and `"newtons laws"` merge into a unified mastery profile.
 - Concepts with accuracy under 70% ($< 0.70$) are flagged as gaps to guide your study queue.
 
-### 🎯 Next Best Lesson Recommendation Engine
+###  Next Best Lesson Recommendation Engine
 - Automatically prioritizes unwatched lessons targeting your weakest concepts using the objective formula:
   $$\text{Score}(\text{Lesson}) = \sum_{\text{Matching Gaps}} (1 - \text{Accuracy})$$
 - Weaker concepts contribute heavier weight, ensuring high-priority gaps are closed first.
 
-### ⏱️ Spaced Repetition (SM-2) & Flashcards
+###  Spaced Repetition (SM-2) & Flashcards
 - SuperMemo-2 algorithm calculating optimal repetition intervals, easiness factors (EF), and review dates based on recall quality (0–5).
 
-### ⚡ Background Job Queue & Real-Time WebSockets
+### Background Job Queue & Real-Time WebSockets
 - Asynchronous video processing and ingestion jobs with progress reporting, automatic retry backoff, and a dead-letter queue (DLQ).
 - Live WebSocket notifications broadcasted to user-scoped rooms upon task completion.
 
 ---
 
-## 🛠️ Architecture & Technology Stack
+##  Architecture & Technology Stack
 
 ```
 VIDYA-AI Ecosystem
@@ -118,7 +118,7 @@ VIDYA-AI Ecosystem
 
 ---
 
-## 🏁 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - **Node.js**: v18.0.0 or higher (v20+ recommended)
@@ -181,7 +181,7 @@ npm run build
 
 ---
 
-## 🧪 Testing & Quality Verification
+##  Testing & Quality Verification
 
 VIDYA AI includes a comprehensive test suite using the built-in Node.js test runner (`node:test`) and `supertest`:
 
@@ -206,7 +206,7 @@ Get-ChildItem -Filter "*.js" | ForEach-Object { node --check $_.Name }
 
 ---
 
-## 💡 FocusLearn Module
+## FocusLearn Module
 
 FocusLearn is located at `public/focus-learn.html` and backed by the `/api/focus` route module.
 
@@ -233,7 +233,7 @@ FocusLearn can run entirely standalone as a single file:
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 All protected endpoints require an `Authorization: Bearer <token>` header.
 
@@ -284,7 +284,7 @@ All protected endpoints require an `Authorization: Bearer <token>` header.
 
 ---
 
-## 🔒 Security & Hardening
+## Security & Hardening
 
 1. **Password Security**: Passwords hashed with `bcryptjs` (salt rounds: 10). Authentication compares hashes asynchronously using constant-time comparison to prevent timing attacks.
 2. **Sensitive Data Redaction**: `password_hash` is stripped from all user responses using a unified `publicUser()` serializer.
@@ -295,7 +295,7 @@ All protected endpoints require an `Authorization: Bearer <token>` header.
 
 ---
 
-## 📂 Project Directory Layout
+##  Project Directory Layout
 
 ```
 VIDHYA-AI/
@@ -344,6 +344,6 @@ VIDHYA-AI/
 
 ---
 
-## 📄 License
+##  License
 
 This project is open-source and available under the [MIT License](LICENSE).
