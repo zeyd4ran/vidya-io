@@ -1,0 +1,8 @@
+node_modules/
+dist/
+data/
+.env
+.local/
+.agents/
+attached_assets/
+*.zip

@@ -1,0 +1,2700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FocusLearn — Distraction-Free Video Learning & AI Tutor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-focus: #3b82f6;
+      
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-text: #1d4ed8;
+      
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      
+      --header-height: 64px;
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #090d16;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1e293b;
+      --bg-subtle: #192231;
+      --border-color: #273549;
+      --border-focus: #60a5fa;
+      
+      --text-main: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-light: rgba(59, 130, 246, 0.15);
+      --primary-text: #93c5fd;
+      
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-light: rgba(245, 158, 11, 0.15);
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.15);
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden; /* Strict requirement: no sideways scroll at 375px */
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      word-break: break-word;
+    }
+
+    /* Top Nav */
+    header {
+      min-height: var(--header-height);
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      background: var(--primary-light);
+      color: var(--primary-text);
+      border-radius: 999px;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .domain-control-group {
+      display: flex;
+      align-items: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 4px 8px;
+      gap: 6px;
+      font-size: 0.85rem;
+      max-width: 100%;
+    }
+
+    .domain-control-group select {
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+      max-width: 110px;
+    }
+
+    .domain-control-group option {
+      background: var(--bg-surface);
+      color: var(--text-main);
+    }
+
+    .lock-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.775rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+      padding-left: 6px;
+      border-left: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .lock-label input[type="checkbox"] {
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .lock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .timer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .timer-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .timer-pulse.active {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Tabs Bar */
+    .tabs-bar {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 16px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: inherit;
+      font-size: 0.825rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      max-width: 100%;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-subtle);
+      border-color: var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--border-color);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-color);
+      color: var(--text-secondary);
+    }
+    .btn-outline:hover:not(:disabled) {
+      border-color: var(--text-secondary);
+      color: var(--text-main);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    .btn-success:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    .btn-sm {
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-icon {
+      padding: 6px;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-icon:hover {
+      color: var(--text-main);
+      background: var(--bg-subtle);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      gap: 20px;
+    }
+
+    /* Layout with sidebar */
+    .learn-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .learn-layout {
+        grid-template-columns: 1fr;
+      }
+      header {
+        padding: 8px 12px;
+      }
+      main {
+        padding: 12px;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      max-width: 100%;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* Feed & Add Lesson Drawer */
+    .feed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .feed-item {
+      padding: 10px 12px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+
+    .feed-item:hover {
+      border-color: var(--primary);
+    }
+
+    .feed-item.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .feed-item-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+      padding-right: 22px;
+    }
+
+    .feed-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .badge-domain {
+      background: var(--primary-light);
+      color: var(--primary-text);
+      border-color: transparent;
+    }
+
+    .badge-watched {
+      background: var(--success-light);
+      color: var(--success);
+      border-color: transparent;
+    }
+
+    .badge-offline-helper {
+      background: var(--warning-light);
+      color: #b45309;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      font-size: 0.68rem;
+    }
+
+    .btn-delete-lesson {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 3px;
+      border-radius: var(--radius-sm);
+    }
+    .btn-delete-lesson:hover {
+      color: var(--danger);
+      background: var(--danger-light);
+    }
+
+    /* Add Lesson Form */
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.825rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--border-focus);
+      background: var(--bg-surface);
+    }
+
+    .alert {
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .alert-warning {
+      background: var(--warning-light);
+      color: #b45309;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .alert-info {
+      background: var(--primary-light);
+      color: var(--primary-text);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* Video Player View */
+    .player-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .player-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .player-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 ratio */
+      height: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #000;
+      box-shadow: var(--shadow-md);
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Video Text / Notes */
+    .video-text-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .video-text-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .char-count {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .transcript-textarea {
+      min-height: 120px;
+      font-family: inherit;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    /* Snapshot Bot */
+    .bot-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-history {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .chat-bubble {
+      padding: 10px 14px;
+      border-radius: var(--radius-lg);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      max-width: 92%;
+      word-break: break-word;
+    }
+
+    .chat-user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-bot {
+      align-self: flex-start;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-bot pre {
+      background: rgba(0,0,0,0.06);
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      margin: 6px 0;
+    }
+
+    [data-theme="dark"] .chat-bot pre {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .chat-img-preview {
+      max-width: 140px;
+      max-height: 100px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+      display: block;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .paste-banner {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .attached-preview-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: var(--bg-subtle);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.775rem;
+    }
+
+    .attached-preview-img {
+      width: 40px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    /* Quiz Tab */
+    .quiz-container {
+      max-width: 780px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quiz-question-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-subtle);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+      word-break: break-word;
+    }
+
+    .quiz-option:hover {
+      background: var(--bg-surface);
+      border-color: var(--primary);
+    }
+
+    .quiz-option input[type="radio"] {
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .quiz-option.correct {
+      background: var(--success-light);
+      border-color: var(--success);
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    [data-theme="dark"] .quiz-option.correct {
+      color: #34d399;
+    }
+
+    .quiz-option.wrong {
+      background: var(--danger-light);
+      border-color: var(--danger);
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    [data-theme="dark"] .quiz-option.wrong {
+      color: #f87171;
+    }
+
+    .quiz-explanation {
+      padding: 8px 12px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-left: 3px solid var(--primary);
+    }
+
+    /* Gaps & Next Tab */
+    .gaps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 780px) {
+      .gaps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .concept-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .concept-bar-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.825rem;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .bar-bg {
+      height: 7px;
+      background: var(--bg-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .rec-box {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(124, 58, 237, 0.08));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Progress Tab */
+    .progress-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .scores-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 140px;
+      padding: 14px 0 6px;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .score-bar-col {
+      flex: 1;
+      min-width: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .score-bar {
+      width: 100%;
+      max-width: 30px;
+      background: var(--primary);
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      transition: height 0.3s ease;
+      position: relative;
+    }
+
+    .score-bar-pct {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .milestones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .milestone-item {
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .milestone-item.unlocked {
+      background: var(--success-light);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .milestone-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-dialog {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Empty states */
+    .empty-state {
+      padding: 36px 16px;
+      text-align: center;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* SVG icon helpers */
+    .icon {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <a href="#" class="brand" onclick="navigateTab('learn'); return false;">
+      <div class="brand-icon">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span>FocusLearn</span>
+      <span class="brand-tag">Focus Mode</span>
+    </a>
+
+    <div class="nav-center">
+      <!-- Domain Dropdown & Lock Checkbox -->
+      <div class="domain-control-group">
+        <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Subject</span>
+        <select id="domainSelect" onchange="changeDomain(this.value)">
+          <!-- Populated by JS -->
+        </select>
+        <label class="lock-label" title="Lock feed to only lessons from selected domain">
+          <input type="checkbox" id="lockCheckbox" onchange="toggleLock(this.checked)">
+          <span class="lock-badge">
+            <svg class="icon" style="width: 13px; height: 13px;" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span id="lockStatusText">Lock Feed</span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Focus Timer -->
+      <div class="timer-badge">
+        <div id="timerPulse" class="timer-pulse"></div>
+        <span id="timerDisplay">0h 00m</span>
+        <button id="timerToggleBtn" class="btn btn-sm btn-outline" onclick="toggleTimer()">
+          Start focus
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Theme Toggle -->
+      <button class="btn btn-icon" id="themeToggleBtn" title="Toggle Theme" onclick="toggleTheme()">
+        <svg class="icon" id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      
+      <!-- Data Options (Export/Import) -->
+      <button class="btn btn-icon" title="Data Backup / Sample Lessons" onclick="openDataModal()">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="tabs-bar">
+    <button class="tab-btn active" id="tabBtn-learn" onclick="navigateTab('learn')">
+      <svg class="icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Learn</span>
+    </button>
+    <button class="tab-btn" id="tabBtn-quiz" onclick="navigateTab('quiz')">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Quiz</span>
+    </button>
+    <button class="tab-btn" id="tabBtn-gaps" onclick="navigateTab('gaps')">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Gaps & Next</span>
+    </button>
+    <button class="tab-btn" id="tabBtn-progress" onclick="navigateTab('progress')">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      <span>Progress</span>
+    </button>
+  </nav>
+
+  <!-- Main Views Container -->
+  <main id="appMain">
+    <!-- Rendered Dynamically via render() -->
+  </main>
+
+  <!-- Data Backup Modal -->
+  <div id="dataModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-dialog">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem; font-weight: 700;">Data & Backup Tools</h3>
+        <button class="btn btn-icon" onclick="closeDataModal()">✕</button>
+      </div>
+      <p style="font-size: 0.825rem; color: var(--text-secondary);">
+        All your learning history, quiz scores, focus seconds, and notes are stored in <code>localStorage['fl1']</code> and synced with your backend account.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button class="btn btn-secondary" onclick="exportDataJSON()" style="justify-content: flex-start;">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export Progress to JSON
+        </button>
+
+        <div>
+          <label class="btn btn-secondary" style="width: 100%; justify-content: flex-start; cursor: pointer;">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            Import Progress from JSON
+            <input type="file" id="importFileInput" accept=".json" onchange="importDataJSON(event)" style="display: none;">
+          </label>
+        </div>
+
+        <button class="btn btn-outline" onclick="loadSampleLessons()" style="justify-content: flex-start;">
+          <svg class="icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Load Curated Sample Lessons (Physics, Maths, Coding)
+        </button>
+
+        <button class="btn btn-outline" style="color: var(--danger); justify-content: flex-start;" onclick="resetAllData()">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Clear All Site Data & Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * FocusLearn Client Application
+     * Single HTML file with strict XSS sanitization, 375px responsive layout,
+     * backend integration with /api/focus, and labeled offline fallbacks.
+     */
+    const STORAGE_KEY = 'fl1';
+    const PRESET_DOMAINS = ['Maths', 'Physics', 'Chemistry', 'Biology', 'Coding', 'Languages'];
+
+    // Concept normalisation pure function: merges near-duplicates
+    function normalizeConcept(name) {
+      if (!name || typeof name !== 'string') return '';
+      return name
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s]/g, '')
+        .replace(/\s+/g, ' ');
+    }
+
+    // Default State Schema (fl1 compliant)
+    let S = {
+      domain: 'Physics',
+      locked: false,
+      secs: 0,
+      v: [], // { id, title, domain, tags: [], tr: "", w: boolean }
+      q: []  // { id, s, n, hit: [], miss: [], at: number }
+    };
+
+    // UI Runtime State
+    let UI = {
+      activeTab: 'learn',
+      selectedVideoId: null,
+      timerRunning: false,
+      timerInterval: null,
+      theme: 'light',
+      chatHistory: [], // { role: 'user'|'bot', text, imgUrl, isOfflineHelper: boolean }
+      activeQuiz: null, // { quizId, videoId, questions, userAnswers, submitted, isOfflineHelper }
+      attachedImageBase64: null,
+      addLessonError: null
+    };
+
+    /**
+     * Strict HTML escaping to prevent raw text from reaching innerHTML unescaped.
+     * Tested against: <img src=x onerror=alert(1)>
+     */
+    function esc(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Get Auth Token for backend API calls
+    function getAuthToken() {
+      try {
+        return localStorage.getItem('vidya_token') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    // Load state from localStorage
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            S = {
+              domain: parsed.domain || 'Physics',
+              locked: Boolean(parsed.locked),
+              secs: Number(parsed.secs) || 0,
+              v: Array.isArray(parsed.v) ? parsed.v : [],
+              q: Array.isArray(parsed.q) ? parsed.q : []
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Could not read localStorage:', e);
+      }
+
+      // Load theme preference
+      try {
+        UI.theme = localStorage.getItem('fl_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      } catch (e) {}
+
+      applyTheme();
+
+      // If feed is empty, populate default curated lessons
+      if (!S.v || S.v.length === 0) {
+        loadDefaultSampleLessons(false);
+      }
+
+      const filtered = getFilteredLessons();
+      if (filtered.length > 0) {
+        UI.selectedVideoId = filtered[0].id;
+      } else if (S.v.length > 0) {
+        UI.selectedVideoId = S.v[0].id;
+      }
+    }
+
+    // Save state to localStorage
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+      } catch (e) {
+        console.warn('Could not write localStorage:', e);
+      }
+    }
+
+    // Curated starter lessons
+    function loadDefaultSampleLessons(forceRender = true) {
+      S.v = [
+        {
+          id: 'dQw4w9WgXcQ',
+          title: "Newton's Laws of Motion & Everyday Physics",
+          domain: 'Physics',
+          tags: ['newton laws', 'friction', 'inertia'],
+          tr: "Newton's first law states that an object at rest remains at rest unless acted upon by an external net force. Newton's second law is F = ma (Force equals mass times acceleration). Newton's third law explains that every action has an equal and opposite reaction. Friction opposes relative motion between contacting surfaces.",
+          w: true
+        },
+        {
+          id: 'kKKM8Y-u7ds',
+          title: "Understanding Friction & Normal Force",
+          domain: 'Physics',
+          tags: ['friction', 'forces', 'free body diagrams'],
+          tr: "Friction occurs because surfaces have microscopic roughness. Static friction prevents sliding, while kinetic friction acts during motion. The friction force is proportional to the normal force: F_f <= mu * F_n.",
+          w: false
+        },
+        {
+          id: 'aircAruvnKk',
+          title: "Neural Networks from Scratch & Gradient Descent",
+          domain: 'Coding',
+          tags: ['machine learning', 'gradient descent', 'backpropagation'],
+          tr: "A neural network takes inputs, multiplies them by weights, adds bias, and passes the sum through an activation function like ReLU. Loss functions measure error, and gradient descent updates weights in the direction of steepest decrease.",
+          w: false
+        },
+        {
+          id: 'WUvTyaaNkzM',
+          title: "Calculus: Essence of Linear Algebra & Vectors",
+          domain: 'Maths',
+          tags: ['vectors', 'matrix transformation', 'eigenvalues'],
+          tr: "Vectors can be thought of as arrows pointing in space with a length and direction, or ordered lists of numbers. A linear transformation moves vectors while keeping grid lines parallel and evenly spaced.",
+          w: false
+        }
+      ];
+
+      S.q = [
+        {
+          id: 'dQw4w9WgXcQ',
+          s: 2,
+          n: 3,
+          hit: ['newton laws', 'inertia'],
+          miss: ['friction'],
+          at: Date.now() - 3600000
+        }
+      ];
+
+      saveState();
+      if (forceRender) render();
+    }
+
+    function getDomains() {
+      const set = new Set(PRESET_DOMAINS);
+      S.v.forEach(v => {
+        if (v.domain) set.add(v.domain.trim());
+      });
+      return Array.from(set);
+    }
+
+    function extractYouTubeId(urlOrId) {
+      if (!urlOrId || typeof urlOrId !== 'string') return null;
+      const clean = urlOrId.trim();
+      if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = clean.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function changeDomain(newDomain) {
+      S.domain = newDomain;
+      const filtered = getFilteredLessons();
+      if (filtered.length > 0) {
+        if (!filtered.some(v => v.id === UI.selectedVideoId)) {
+          UI.selectedVideoId = filtered[0].id;
+        }
+      } else {
+        UI.selectedVideoId = null;
+      }
+      saveState();
+      render();
+    }
+
+    function toggleLock(locked) {
+      S.locked = locked;
+      saveState();
+      render();
+    }
+
+    // Timer management: counts while running, updates Progress tab, auto-saves every 10s
+    function toggleTimer() {
+      if (UI.timerRunning) {
+        UI.timerRunning = false;
+        clearInterval(UI.timerInterval);
+        UI.timerInterval = null;
+        saveState();
+      } else {
+        UI.timerRunning = true;
+        let tickCount = 0;
+        UI.timerInterval = setInterval(() => {
+          S.secs += 1;
+          tickCount += 1;
+          updateTimerUI();
+          if (tickCount % 10 === 0) {
+            saveState();
+          }
+        }, 1000);
+      }
+      updateTimerUI();
+      if (UI.activeTab === 'progress') {
+        render();
+      }
+    }
+
+    function formatTimeHoursMins(totalSecs) {
+      const h = Math.floor(totalSecs / 3600);
+      const m = Math.floor((totalSecs % 3600) / 60);
+      const s = totalSecs % 60;
+      if (h > 0) {
+        return `${h}h ${m.toString().padStart(2, '0')}m`;
+      }
+      return `${m}m ${s.toString().padStart(2, '0')}s`;
+    }
+
+    function updateTimerUI() {
+      const display = document.getElementById('timerDisplay');
+      const pulse = document.getElementById('timerPulse');
+      const btn = document.getElementById('timerToggleBtn');
+      if (display) display.textContent = formatTimeHoursMins(S.secs);
+      if (pulse) {
+        if (UI.timerRunning) pulse.classList.add('active');
+        else pulse.classList.remove('active');
+      }
+      if (btn) {
+        btn.textContent = UI.timerRunning ? 'Pause focus' : 'Start focus';
+        if (UI.timerRunning) {
+          btn.className = 'btn btn-sm btn-outline';
+          btn.style.color = 'var(--danger)';
+          btn.style.borderColor = 'var(--danger)';
+        } else {
+          btn.className = 'btn btn-sm btn-outline';
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }
+      }
+    }
+
+    function getFilteredLessons() {
+      if (!S.locked && S.domain === 'All') {
+        return S.v;
+      }
+      return S.v.filter(v => v.domain.toLowerCase() === S.domain.toLowerCase());
+    }
+
+    function navigateTab(tabName) {
+      UI.activeTab = tabName;
+      ['learn', 'quiz', 'gaps', 'progress'].forEach(t => {
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (btn) {
+          if (t === tabName) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+      render();
+    }
+
+    function toggleTheme() {
+      UI.theme = UI.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('fl_theme', UI.theme); } catch(e) {}
+      applyTheme();
+    }
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', UI.theme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) {
+        if (UI.theme === 'dark') {
+          icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        } else {
+          icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+        }
+      }
+    }
+
+    /**
+     * Preserves typing cursor while continuously persisting transcript
+     */
+    function handleTranscriptInput(el, videoId) {
+      const val = el.value;
+      const lesson = S.v.find(v => v.id === videoId);
+      if (lesson) {
+        lesson.tr = val;
+        saveState();
+        const counter = document.getElementById(`charCount-${videoId}`);
+        if (counter) {
+          counter.textContent = `${Math.min(val.length, 12000).toLocaleString()} / 12,000 sent to AI`;
+        }
+      }
+    }
+
+    function toggleWatched(videoId) {
+      const lesson = S.v.find(v => v.id === videoId);
+      if (lesson) {
+        lesson.w = !lesson.w;
+        saveState();
+        render();
+      }
+    }
+
+    function deleteLesson(videoId, e) {
+      if (e) e.stopPropagation();
+      if (!confirm('Are you sure you want to remove this lesson from your feed?')) return;
+      S.v = S.v.filter(v => v.id !== videoId);
+      if (UI.selectedVideoId === videoId) {
+        const filtered = getFilteredLessons();
+        UI.selectedVideoId = filtered.length > 0 ? filtered[0].id : null;
+      }
+      saveState();
+      render();
+    }
+
+    function selectLesson(videoId) {
+      UI.selectedVideoId = videoId;
+      UI.activeQuiz = null;
+      render();
+    }
+
+    function handleAddLesson(event) {
+      event.preventDefault();
+      UI.addLessonError = null;
+
+      const urlInput = document.getElementById('lessonUrl');
+      const titleInput = document.getElementById('lessonTitle');
+      const domainInput = document.getElementById('lessonDomain');
+      const tagsInput = document.getElementById('lessonTags');
+
+      const rawUrl = urlInput.value.trim();
+      const title = titleInput.value.trim();
+      const targetDomain = domainInput.value.trim() || S.domain;
+      const tags = tagsInput.value.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+
+      const ytId = extractYouTubeId(rawUrl);
+      if (!ytId) {
+        UI.addLessonError = 'Please paste a valid YouTube video link, shorts, or 11-character video ID.';
+        render();
+        return;
+      }
+
+      // Check domain lock
+      if (S.locked && S.domain !== 'All' && targetDomain.toLowerCase() !== S.domain.toLowerCase()) {
+        UI.addLessonError = `Feed is locked to "${S.domain}". Untick "Lock Feed" or switch subject to add lessons in "${targetDomain}".`;
+        render();
+        return;
+      }
+
+      // Check duplicate
+      const existing = S.v.find(v => v.id === ytId);
+      if (existing) {
+        UI.addLessonError = `This video is already in your feed ("${existing.title}").`;
+        UI.selectedVideoId = ytId;
+        render();
+        return;
+      }
+
+      const newLesson = {
+        id: ytId,
+        title: title || `Lesson: ${ytId}`,
+        domain: targetDomain,
+        tags: tags,
+        tr: '',
+        w: false
+      };
+
+      S.v.unshift(newLesson);
+      S.domain = targetDomain;
+      UI.selectedVideoId = ytId;
+      UI.addLessonError = null;
+
+      saveState();
+      render();
+    }
+
+    /* ----------------------------------------------------
+       Knowledge Gaps & Next Lesson Pure Logic
+       ---------------------------------------------------- */
+    function computeConceptAccuracy() {
+      const hits = {};
+      const misses = {};
+      const totals = {};
+
+      S.q.forEach(attempt => {
+        if (Array.isArray(attempt.hit)) {
+          attempt.hit.forEach(c => {
+            const norm = normalizeConcept(c);
+            if (!norm) return;
+            hits[norm] = (hits[norm] || 0) + 1;
+            totals[norm] = (totals[norm] || 0) + 1;
+          });
+        }
+        if (Array.isArray(attempt.miss)) {
+          attempt.miss.forEach(c => {
+            const norm = normalizeConcept(c);
+            if (!norm) return;
+            misses[norm] = (misses[norm] || 0) + 1;
+            totals[norm] = (totals[norm] || 0) + 1;
+          });
+        }
+      });
+
+      const list = [];
+      for (const concept in totals) {
+        const hit = hits[concept] || 0;
+        const total = totals[concept];
+        const acc = hit / total;
+        list.push({
+          concept,
+          accuracy: acc,
+          hit,
+          miss: misses[concept] || 0,
+          total,
+          isGap: acc < 0.70
+        });
+      }
+
+      list.sort((a, b) => a.accuracy - b.accuracy);
+      return list;
+    }
+
+    function calculateNextLesson() {
+      const concepts = computeConceptAccuracy();
+      const gapConcepts = concepts.filter(c => c.accuracy < 0.70);
+
+      const candidates = S.domain === 'All' ? S.v : S.v.filter(v => v.domain.toLowerCase() === S.domain.toLowerCase());
+      if (candidates.length === 0) return null;
+
+      const unwatched = candidates.filter(v => !v.w);
+
+      if (unwatched.length > 0) {
+        let bestLesson = unwatched[0];
+        let bestScore = -1;
+        let matchedConceptsForBest = [];
+
+        unwatched.forEach(lesson => {
+          const searchable = `${lesson.title} ${lesson.tags.join(' ')} ${(lesson.tr || '').slice(0, 3000)}`.toLowerCase();
+          let score = 0;
+          let matched = [];
+
+          gapConcepts.forEach(gap => {
+            const normGap = normalizeConcept(gap.concept);
+            if (normGap && searchable.includes(normGap)) {
+              score += (1 - gap.accuracy);
+              matched.push(gap);
+            }
+          });
+
+          if (score > bestScore) {
+            bestScore = score;
+            bestLesson = lesson;
+            matchedConceptsForBest = matched;
+          }
+        });
+
+        let reason = '';
+        if (matchedConceptsForBest.length > 0) {
+          const names = matchedConceptsForBest.map(m => `"${m.concept}" (${Math.round(m.accuracy * 100)}% accuracy)`).join(', ');
+          reason = `Targets your weak concepts: ${names}.`;
+        } else {
+          reason = `Next sequential unwatched lesson in your ${S.domain} curriculum.`;
+        }
+
+        return {
+          lesson: bestLesson,
+          reason,
+          allWatched: false
+        };
+      } else {
+        let bestLesson = candidates[0];
+        let bestScore = -1;
+        let matchedConceptsForBest = [];
+
+        candidates.forEach(lesson => {
+          const searchable = `${lesson.title} ${lesson.tags.join(' ')} ${(lesson.tr || '').slice(0, 3000)}`.toLowerCase();
+          let score = 0;
+          let matched = [];
+          gapConcepts.forEach(gap => {
+            const normGap = normalizeConcept(gap.concept);
+            if (normGap && searchable.includes(normGap)) {
+              score += (1 - gap.accuracy);
+              matched.push(gap);
+            }
+          });
+          if (score > bestScore) {
+            bestScore = score;
+            bestLesson = lesson;
+            matchedConceptsForBest = matched;
+          }
+        });
+
+        let reason = "You've completed all lessons in this subject! ";
+        if (matchedConceptsForBest.length > 0) {
+          reason += `Review "${bestLesson.title}" to reinforce weak concepts: ${matchedConceptsForBest.map(m => m.concept).join(', ')}.`;
+        } else {
+          reason += `Revisit "${bestLesson.title}" and retake its quiz for mastery.`;
+        }
+
+        return {
+          lesson: bestLesson,
+          reason,
+          allWatched: true
+        };
+      }
+    }
+
+    /* ----------------------------------------------------
+       Backend API Calls & Offline Fallback Labeling
+       ---------------------------------------------------- */
+
+    // Snapshot Q&A via Backend
+    async function requestBackendAsk(question, tr, imageBase64, lesson) {
+      const token = getAuthToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch('/api/focus/ask', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          question,
+          tr,
+          image: imageBase64,
+          videoId: lesson.id
+        })
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `Backend returned status ${res.status}`);
+      }
+
+      const data = await res.json();
+      return data.answer;
+    }
+
+    // Offline rule-based fallback tutor — MUST be labeled as "Offline helper (not AI)"
+    function generateOfflineHelperAnswer(question, tr, imageBase64, lesson) {
+      const qLow = (question || '').toLowerCase();
+      let reply = '';
+
+      if (imageBase64 && !question) {
+        reply = `**Frame Observation:**\nExamining the frame from "${lesson.title}". In this diagram/visual, key properties of ${lesson.tags[0] || lesson.domain} are displayed.\n- Note the relative dimensions and labels on the visual.\n- Relate this directly to the definitions in your course syllabus.`;
+      } else if (qLow.includes('friction') || qLow.includes('force') || qLow.includes('law')) {
+        reply = `**Step-by-step Review:**\n1. Forces cause acceleration according to F = ma.\n2. Friction opposes sliding contact.\n3. Verify your free-body diagram before setting up the equations.`;
+      } else {
+        reply = `**Rule-based guidance for "${question}":**\n- Step 1: Identify given variables in ${lesson.domain}.\n- Step 2: Apply the governing formulas from "${lesson.title}".\n- Step 3: Check units and verify boundary conditions.`;
+      }
+
+      return reply;
+    }
+
+    async function handleSendQuestion() {
+      const input = document.getElementById('chatInput');
+      const question = input ? input.value.trim() : '';
+      const imageBase64 = UI.attachedImageBase64;
+
+      if (!question && !imageBase64) return;
+
+      const lesson = S.v.find(v => v.id === UI.selectedVideoId);
+      if (!lesson) return;
+
+      UI.chatHistory.push({
+        role: 'user',
+        text: question || '(Attached screenshot analysis)',
+        imgUrl: imageBase64
+      });
+
+      if (input) input.value = '';
+      UI.attachedImageBase64 = null;
+      render();
+
+      UI.chatHistory.push({
+        role: 'bot',
+        text: 'Thinking...',
+        loading: true
+      });
+      render();
+
+      try {
+        // Try calling the backend endpoint from Part C
+        const realAnswer = await requestBackendAsk(question, lesson.tr, imageBase64, lesson);
+        UI.chatHistory.pop();
+        UI.chatHistory.push({
+          role: 'bot',
+          text: realAnswer,
+          isOfflineHelper: false
+        });
+      } catch (err) {
+        // Fallback: If backend is unavailable, explain clearly and provide labeled offline helper
+        console.warn('Backend /api/focus/ask unavailable:', err.message);
+        UI.chatHistory.pop();
+
+        const offlineReply = generateOfflineHelperAnswer(question, lesson.tr, imageBase64, lesson);
+        UI.chatHistory.push({
+          role: 'bot',
+          text: `[Backend AI service unavailable: ${err.message}]\n\n${offlineReply}`,
+          isOfflineHelper: true // Prominently labeled in UI as "Offline helper (not AI)"
+        });
+      }
+
+      render();
+    }
+
+    // Global Paste (Ctrl+V) handler for screenshots
+    window.addEventListener('paste', (e) => {
+      if (UI.activeTab !== 'learn') return;
+      const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          const blob = item.getAsFile();
+          readImageFile(blob);
+          e.preventDefault();
+          break;
+        }
+      }
+    });
+
+    function handleImageFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      readImageFile(file);
+    }
+
+    function readImageFile(file) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        UI.attachedImageBase64 = evt.target.result;
+        render();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAttachedImage() {
+      UI.attachedImageBase64 = null;
+      render();
+    }
+
+    /* ----------------------------------------------------
+       Quiz Generation & Server Grading
+       ---------------------------------------------------- */
+    async function handleGenerateQuiz() {
+      const lesson = S.v.find(v => v.id === UI.selectedVideoId);
+      if (!lesson) return;
+
+      UI.activeQuiz = {
+        loading: true,
+        videoId: lesson.id
+      };
+      render();
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const res = await fetch('/api/focus/quiz/generate', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            videoId: lesson.id,
+            title: lesson.title,
+            domain: lesson.domain,
+            tr: lesson.tr,
+            tags: lesson.tags
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Server status ${res.status}`);
+        }
+
+        const data = await res.json();
+        UI.activeQuiz = {
+          quizId: data.quizId,
+          videoId: lesson.id,
+          questions: data.questions,
+          userAnswers: {},
+          submitted: false,
+          isOfflineHelper: false
+        };
+      } catch (err) {
+        console.warn('Backend quiz generator unavailable, using offline helper questions:', err.message);
+        // Fallback: rule-based offline generator, labeled as "Offline helper (not AI)"
+        const tags = lesson.tags && lesson.tags.length > 0 ? lesson.tags : [lesson.domain.toLowerCase(), 'core principles'];
+        const c1 = tags[0] || 'core theory';
+        const c2 = tags[1] || tags[0] || 'applied analysis';
+
+        UI.activeQuiz = {
+          quizId: `local_${Date.now()}`,
+          videoId: lesson.id,
+          questions: [
+            { id: 0, q: `What is the foundational principle behind ${c1}?`, options: [`Equilibrium persists unless an unbalanced net force acts`, `Exponential decay occurs uniformly in all directions`, `Independent of ambient physical interactions`, `Gravity is completely neutralized automatically`], concept: c1, answer: 0, explanation: `Equilibrium persists until an external net force is exerted.` },
+            { id: 1, q: `How is the effect of ${c2} quantified?`, options: [`Arbitrary constant factors`, `Proportional to interacting physical forces`, `Always zero in real systems`, `Infinite in vacuum`], concept: c2, answer: 1, explanation: `In standard models, magnitude is proportional to interacting force.` },
+            { id: 2, q: `Which scenario breaks ideal frictionless assumptions in ${lesson.domain}?`, options: [`Uniform velocity`, `Resistive drag or contact friction`, `Inertial frame of reference`, `Zero net torque`], concept: c1, answer: 1, explanation: `Resistive forces violate ideal frictionless assumptions.` },
+            { id: 3, q: `What is the best practice when solving ${lesson.domain} problems?`, options: [`Guessing answers without units`, `Drawing clear free-body diagrams and balancing equations`, `Ignoring direction of vectors`, `Assuming friction is always infinite`], concept: c2, answer: 1, explanation: `Free-body diagrams and unit checks prevent calculation mistakes.` },
+            { id: 4, q: `How does Newton's third law apply to interacting bodies?`, options: [`Every action has an equal and opposite reaction`, `Action forces always exceed reaction forces`, `Reactions only happen after a long delay`, `Only one object experiences force`], concept: c1, answer: 0, explanation: `Action and reaction forces are always equal in magnitude and opposite in direction.` }
+          ],
+          userAnswers: {},
+          submitted: false,
+          isOfflineHelper: true // Prominently labeled
+        };
+      }
+
+      render();
+    }
+
+    function handleSelectOption(qIndex, optionIndex) {
+      if (!UI.activeQuiz || UI.activeQuiz.submitted) return;
+      UI.activeQuiz.userAnswers[qIndex] = optionIndex;
+      render();
+    }
+
+    async function handleSubmitQuiz() {
+      if (!UI.activeQuiz || UI.activeQuiz.submitted) return;
+
+      const qList = UI.activeQuiz.questions;
+      const userAnswers = UI.activeQuiz.userAnswers;
+
+      // 1. If this was a backend quiz, submit to server for server-side grading
+      if (!UI.activeQuiz.isOfflineHelper && UI.activeQuiz.quizId && !UI.activeQuiz.quizId.startsWith('local_')) {
+        try {
+          const token = getAuthToken();
+          const headers = { 'Content-Type': 'application/json' };
+          if (token) headers['Authorization'] = `Bearer ${token}`;
+
+          const res = await fetch('/api/focus/quiz/submit', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              quizId: UI.activeQuiz.quizId,
+              answers: userAnswers
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            UI.activeQuiz.submitted = true;
+            UI.activeQuiz.score = data.score;
+            UI.activeQuiz.serverResults = data.results;
+
+            // Sync to local storage history
+            S.q.push({
+              id: UI.activeQuiz.videoId,
+              s: data.score,
+              n: data.total,
+              hit: data.hitConcepts || [],
+              miss: data.missConcepts || [],
+              at: Date.now()
+            });
+            saveState();
+            render();
+            return;
+          }
+        } catch (e) {
+          console.warn('Server grading failed, falling back to local grading:', e);
+        }
+      }
+
+      // 2. Local fallback grading (for offline helper quizzes or when offline)
+      let score = 0;
+      const hitConcepts = [];
+      const missConcepts = [];
+      const results = [];
+
+      qList.forEach((q, idx) => {
+        const userPick = userAnswers[idx];
+        const isCorrect = userPick !== undefined && userPick === q.answer;
+        if (isCorrect) {
+          score += 1;
+          hitConcepts.push(q.concept);
+        } else {
+          missConcepts.push(q.concept);
+        }
+        results.push({
+          questionIndex: idx,
+          isCorrect,
+          correctAnswer: q.answer,
+          explanation: q.explanation || 'Reviewed on submission.'
+        });
+      });
+
+      UI.activeQuiz.submitted = true;
+      UI.activeQuiz.score = score;
+      UI.activeQuiz.serverResults = results;
+
+      S.q.push({
+        id: UI.activeQuiz.videoId,
+        s: score,
+        n: qList.length,
+        hit: hitConcepts,
+        miss: missConcepts,
+        at: Date.now()
+      });
+
+      saveState();
+      render();
+    }
+
+    /* ----------------------------------------------------
+       Export / Import / Reset Tools
+       ---------------------------------------------------- */
+    function openDataModal() {
+      document.getElementById('dataModal').style.display = 'flex';
+    }
+    function closeDataModal() {
+      document.getElementById('dataModal').style.display = 'none';
+    }
+
+    function exportDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(S, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `focuslearn-backup-${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && typeof parsed === 'object') {
+            S = {
+              domain: parsed.domain || 'Physics',
+              locked: Boolean(parsed.locked),
+              secs: Number(parsed.secs) || 0,
+              v: Array.isArray(parsed.v) ? parsed.v : [],
+              q: Array.isArray(parsed.q) ? parsed.q : []
+            };
+            saveState();
+            closeDataModal();
+            render();
+            alert('Progress data restored successfully!');
+          } else {
+            alert('Invalid backup file format.');
+          }
+        } catch (err) {
+          alert('Failed to parse JSON backup file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function loadSampleLessons() {
+      loadDefaultSampleLessons(true);
+      closeDataModal();
+    }
+
+    function resetAllData() {
+      if (confirm('Clear all site data and reset progress? This cannot be undone.')) {
+        try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+        S = {
+          domain: 'Physics',
+          locked: false,
+          secs: 0,
+          v: [],
+          q: []
+        };
+        saveState();
+        closeDataModal();
+        render();
+      }
+    }
+
+    /* ----------------------------------------------------
+       Render Function (Declarative UI)
+       ---------------------------------------------------- */
+    function render() {
+      // Sync Domain Select Options
+      const domains = getDomains();
+      const domainSelect = document.getElementById('domainSelect');
+      if (domainSelect) {
+        let opts = `<option value="All" ${S.domain === 'All' ? 'selected' : ''}>All</option>`;
+        domains.forEach(d => {
+          opts += `<option value="${esc(d)}" ${S.domain.toLowerCase() === d.toLowerCase() ? 'selected' : ''}>${esc(d)}</option>`;
+        });
+        domainSelect.innerHTML = opts;
+      }
+
+      // Sync Lock Toggle
+      const lockCheckbox = document.getElementById('lockCheckbox');
+      const lockStatusText = document.getElementById('lockStatusText');
+      if (lockCheckbox) lockCheckbox.checked = S.locked;
+      if (lockStatusText) {
+        lockStatusText.textContent = S.locked ? 'Locked' : 'Unlocked';
+        lockStatusText.style.color = S.locked ? 'var(--primary)' : 'inherit';
+        lockStatusText.style.fontWeight = S.locked ? '700' : '500';
+      }
+
+      updateTimerUI();
+
+      const container = document.getElementById('appMain');
+      if (!container) return;
+
+      if (UI.activeTab === 'learn') {
+        container.innerHTML = renderLearnView();
+      } else if (UI.activeTab === 'quiz') {
+        container.innerHTML = renderQuizView();
+      } else if (UI.activeTab === 'gaps') {
+        container.innerHTML = renderGapsView();
+      } else if (UI.activeTab === 'progress') {
+        container.innerHTML = renderProgressView();
+      }
+    }
+
+    /* ----------------------------------------------------
+       View: Learn (Player + Notes + Snapshot Bot)
+       ---------------------------------------------------- */
+    function renderLearnView() {
+      const filtered = getFilteredLessons();
+      const currentLesson = S.v.find(v => v.id === UI.selectedVideoId);
+
+      let feedItemsHtml = '';
+      if (filtered.length === 0) {
+        feedItemsHtml = `
+          <div class="empty-state" style="padding: 20px 10px;">
+            <p style="font-size: 0.85rem;">No lessons in <strong>${esc(S.domain)}</strong>.</p>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">Add a link below to start.</p>
+          </div>
+        `;
+      } else {
+        feedItemsHtml = filtered.map(v => {
+          const isActive = v.id === UI.selectedVideoId;
+          return `
+            <div class="feed-item ${isActive ? 'active' : ''}" onclick="selectLesson('${v.id}')">
+              <button class="btn-delete-lesson" title="Remove lesson" onclick="deleteLesson('${v.id}', event)">✕</button>
+              <div class="feed-item-title">${esc(v.title)}</div>
+              <div class="feed-item-meta">
+                <span class="badge badge-domain">${esc(v.domain)}</span>
+                ${v.w ? '<span class="badge badge-watched">✓ Watched</span>' : '<span class="badge">Unwatched</span>'}
+                ${v.tags.map(t => `<span class="badge">#${esc(t)}</span>`).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const errorHtml = UI.addLessonError ? `
+        <div class="alert alert-warning">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div>${esc(UI.addLessonError)}</div>
+        </div>
+      ` : '';
+
+      let playerAreaHtml = '';
+      if (!currentLesson) {
+        playerAreaHtml = `
+          <div class="card empty-state" style="min-height: 420px;">
+            <svg class="icon" style="width: 44px; height: 44px; color: var(--primary); margin-bottom: 8px;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <h3 style="font-size: 1.15rem;">No Lesson Selected</h3>
+            <p style="max-width: 380px; font-size: 0.85rem;">
+              Choose a video from the feed or add a YouTube link to begin.
+            </p>
+          </div>
+        `;
+      } else {
+        const embedUrl = `https://www.youtube-nocookie.com/embed/${currentLesson.id}?rel=0&modestbranding=1&enablejsapi=1`;
+        const youtubeLink = `https://www.youtube.com/watch?v=${currentLesson.id}`;
+        const charLength = (currentLesson.tr || '').length;
+
+        const chatHtml = UI.chatHistory.map(msg => {
+          if (msg.role === 'user') {
+            return `
+              <div class="chat-bubble chat-user">
+                ${msg.imgUrl ? `<img src="${msg.imgUrl}" class="chat-img-preview" alt="Screenshot" />` : ''}
+                <div>${esc(msg.text)}</div>
+              </div>
+            `;
+          } else {
+            return `
+              <div class="chat-bubble chat-bot">
+                ${msg.isOfflineHelper ? `
+                  <div style="margin-bottom: 6px;">
+                    <span class="badge badge-offline-helper">Offline helper (not AI)</span>
+                  </div>
+                ` : ''}
+                <div>${msg.loading ? '<em>Analyzing video context...</em>' : esc(msg.text).replace(/\n/g, '<br/>')}</div>
+              </div>
+            `;
+          }
+        }).join('');
+
+        playerAreaHtml = `
+          <div class="player-container">
+            <div class="player-header">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="badge badge-domain">${esc(currentLesson.domain)}</span>
+                  ${currentLesson.w ? '<span class="badge badge-watched">✓ Watched</span>' : '<span class="badge">Unwatched</span>'}
+                  ${currentLesson.tags.map(t => `<span class="badge">#${esc(t)}</span>`).join('')}
+                </div>
+                <h1 class="player-title">${esc(currentLesson.title)}</h1>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button class="btn ${currentLesson.w ? 'btn-secondary' : 'btn-success'}" onclick="toggleWatched('${currentLesson.id}')">
+                  ${currentLesson.w ? 'Mark Unwatched' : '✓ Mark Watched'}
+                </button>
+                <a href="${youtubeLink}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" title="Open fallback on YouTube">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  YouTube
+                </a>
+              </div>
+            </div>
+
+            <!-- YouTube Embed -->
+            <div class="video-wrapper">
+              <iframe 
+                src="${embedUrl}" 
+                title="${esc(currentLesson.title)}" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+            </div>
+
+            <!-- Video Text / Notes (Typing preserves cursor) -->
+            <div class="card video-text-section">
+              <div class="video-text-header">
+                <span>Video Text & Transcript (Auto-saved)</span>
+                <span class="char-count" id="charCount-${currentLesson.id}">
+                  ${Math.min(charLength, 12000).toLocaleString()} / 12,000 sent to AI
+                </span>
+              </div>
+              <textarea 
+                class="form-textarea transcript-textarea" 
+                placeholder="Paste video transcript or notes here. Auto-saved as you type..."
+                oninput="handleTranscriptInput(this, '${currentLesson.id}')">${esc(currentLesson.tr || '')}</textarea>
+            </div>
+
+            <!-- Snapshot Bot -->
+            <div class="card bot-section">
+              <div class="card-title">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <svg class="icon" style="color: var(--primary);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>Snapshot Bot & Tutor</span>
+                </div>
+                <div class="paste-banner">
+                  <svg class="icon" style="width: 13px; height: 13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Ctrl+V to paste screenshot
+                </div>
+              </div>
+
+              <div class="chat-history">
+                ${UI.chatHistory.length === 0 ? `
+                  <div style="padding: 12px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+                    Ask questions about this lesson or paste a screenshot frame to get step-by-step answers.
+                  </div>
+                ` : chatHtml}
+              </div>
+
+              ${UI.attachedImageBase64 ? `
+                <div class="attached-preview-bar">
+                  <img src="${UI.attachedImageBase64}" class="attached-preview-img" alt="Attached" />
+                  <span style="flex: 1; font-weight: 500;">Screenshot attached</span>
+                  <button class="btn btn-sm btn-outline" style="color: var(--danger);" onclick="removeAttachedImage()">Remove</button>
+                </div>
+              ` : ''}
+
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input 
+                  type="text" 
+                  id="chatInput" 
+                  class="form-input" 
+                  placeholder="Ask a question or explain screenshot..."
+                  onkeydown="if(event.key === 'Enter') handleSendQuestion();" 
+                />
+                
+                <label class="btn btn-secondary btn-icon" title="Attach screenshot file" style="cursor: pointer;">
+                  <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <input type="file" accept="image/*" onchange="handleImageFile(event)" style="display: none;" />
+                </label>
+
+                <button class="btn btn-primary" onclick="handleSendQuestion()">
+                  Ask
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="learn-layout">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="card">
+              <div class="feed-header">
+                <span class="card-title" style="margin-bottom: 0;">Lesson Feed</span>
+                <span class="badge">${filtered.length}</span>
+              </div>
+              <div class="feed-list">
+                ${feedItemsHtml}
+              </div>
+            </div>
+
+            <!-- Add Lesson Drawer -->
+            <div class="card">
+              <h3 class="card-title">Add a Lesson</h3>
+              ${errorHtml}
+              <form onsubmit="handleAddLesson(event)">
+                <div class="form-group">
+                  <label class="form-label">YouTube Link or ID</label>
+                  <input type="text" id="lessonUrl" class="form-input" placeholder="https://youtu.be/... or watch?v=..." required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Lesson Title</label>
+                  <input type="text" id="lessonTitle" class="form-input" placeholder="e.g. Newton's 2nd Law" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Subject / Domain</label>
+                  <input type="text" id="lessonDomain" class="form-input" value="${esc(S.domain === 'All' ? 'Physics' : S.domain)}" placeholder="e.g. Physics, Coding..." required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Concept Tags (comma separated)</label>
+                  <input type="text" id="lessonTags" class="form-input" placeholder="e.g. friction, forces" />
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                  Add to Feed
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div>
+            ${playerAreaHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    /* ----------------------------------------------------
+       View: Quiz (5 Questions + Submission + Explanations)
+       ---------------------------------------------------- */
+    function renderQuizView() {
+      const lesson = S.v.find(v => v.id === UI.selectedVideoId);
+
+      if (!lesson) {
+        return `
+          <div class="card empty-state" style="max-width: 500px; margin: 30px auto;">
+            <h3>Select a Lesson First</h3>
+            <p style="font-size: 0.85rem;">Select or add a video lesson on the Learn tab to generate quizzes.</p>
+            <button class="btn btn-primary" onclick="navigateTab('learn')">Go to Learn</button>
+          </div>
+        `;
+      }
+
+      const pastAttempts = S.q.filter(item => item.id === lesson.id);
+
+      let quizContent = '';
+      if (!UI.activeQuiz) {
+        quizContent = `
+          <div class="card" style="text-align: center; padding: 36px 16px;">
+            <div style="margin-bottom: 12px;">
+              <span class="badge badge-domain">${esc(lesson.domain)}</span>
+            </div>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">${esc(lesson.title)}</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 440px; margin: 0 auto 20px;">
+              Generate a 5-question multiple choice test created directly from this video's notes and transcript.
+            </p>
+            <button class="btn btn-primary" style="padding: 9px 20px;" onclick="handleGenerateQuiz()">
+              Generate Quiz from this Video
+            </button>
+          </div>
+        `;
+      } else if (UI.activeQuiz.loading) {
+        quizContent = `
+          <div class="card empty-state" style="padding: 48px 16px;">
+            <div style="font-size: 1rem; font-weight: 600; margin-bottom: 6px;">Generating structured quiz questions...</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Analyzing video concepts and questions.</p>
+          </div>
+        `;
+      } else {
+        const questionsHtml = UI.activeQuiz.questions.map((q, qIdx) => {
+          const userPick = UI.activeQuiz.userAnswers[qIdx];
+          const isSubmitted = UI.activeQuiz.submitted;
+          const serverResult = UI.activeQuiz.serverResults ? UI.activeQuiz.serverResults[qIdx] : null;
+
+          const optionsHtml = q.options.map((opt, optIdx) => {
+            let stateClass = '';
+            if (isSubmitted && serverResult) {
+              if (optIdx === serverResult.correctAnswer) {
+                stateClass = 'correct';
+              } else if (userPick === optIdx && optIdx !== serverResult.correctAnswer) {
+                stateClass = 'wrong';
+              }
+            }
+
+            return `
+              <label class="quiz-option ${stateClass}" onclick="handleSelectOption(${qIdx}, ${optIdx})">
+                <input 
+                  type="radio" 
+                  name="q_${qIdx}" 
+                  ${userPick === optIdx ? 'checked' : ''} 
+                  ${isSubmitted ? 'disabled' : ''} 
+                />
+                <span>${esc(opt)}</span>
+              </label>
+            `;
+          }).join('');
+
+          return `
+            <div class="quiz-question-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">QUESTION ${qIdx + 1} OF ${UI.activeQuiz.questions.length}</span>
+                <span class="badge">#${esc(q.concept)}</span>
+              </div>
+              <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">${esc(q.q)}</div>
+              <div class="quiz-options">
+                ${optionsHtml}
+              </div>
+              ${isSubmitted && serverResult ? `
+                <div class="quiz-explanation">
+                  <strong>Explanation:</strong> ${esc(serverResult.explanation)}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+
+        quizContent = `
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <h2 style="font-size: 1.15rem; font-weight: 700;">Quiz: ${esc(lesson.title)}</h2>
+                  ${UI.activeQuiz.isOfflineHelper ? '<span class="badge badge-offline-helper">Offline helper (not AI)</span>' : ''}
+                </div>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">Answer all 5 questions. Unanswered questions count as wrong.</span>
+              </div>
+              ${UI.activeQuiz.submitted ? `
+                <div>
+                  <span style="font-size: 1.3rem; font-weight: 700; color: ${UI.activeQuiz.score >= 4 ? 'var(--success)' : 'var(--warning)'};">
+                    Score: ${UI.activeQuiz.score} / ${UI.activeQuiz.questions.length}
+                  </span>
+                </div>
+              ` : ''}
+            </div>
+
+            ${questionsHtml}
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+              ${!UI.activeQuiz.submitted ? `
+                <button class="btn btn-primary" style="padding: 8px 20px;" onclick="handleSubmitQuiz()">
+                  Submit Quiz
+                </button>
+              ` : `
+                <button class="btn btn-secondary" onclick="handleGenerateQuiz()">
+                  Take New Quiz
+                </button>
+                <button class="btn btn-primary" onclick="navigateTab('gaps')">
+                  View Gaps & Next →
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }
+
+      let pastAttemptsHtml = '';
+      if (pastAttempts.length > 0) {
+        pastAttemptsHtml = `
+          <div class="card" style="margin-top: 16px;">
+            <h3 class="card-title">Past Attempts</h3>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              ${pastAttempts.map((a, i) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: var(--bg-subtle); border-radius: var(--radius-sm); font-size: 0.8rem;">
+                  <span>Attempt #${i + 1} (${new Date(a.at).toLocaleDateString()})</span>
+                  <span style="font-weight: 700; color: ${a.s >= (a.n * 0.7) ? 'var(--success)' : 'var(--danger)'};">
+                    ${a.s} / ${a.n} (${Math.round((a.s / a.n) * 100)}%)
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="quiz-container">
+          ${quizContent}
+          ${pastAttemptsHtml}
+        </div>
+      `;
+    }
+
+    /* ----------------------------------------------------
+       View: Gaps & Next (Weak Concepts + Recommendation)
+       ---------------------------------------------------- */
+    function renderGapsView() {
+      const concepts = computeConceptAccuracy();
+      const nextRecommendation = calculateNextLesson();
+
+      let conceptListHtml = '';
+      if (concepts.length === 0) {
+        conceptListHtml = `
+          <div class="empty-state" style="padding: 24px 12px;">
+            <p style="font-size: 0.85rem;">No quiz data recorded yet.</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Take a quiz on any lesson to track your concept mastery and identify gaps.</p>
+          </div>
+        `;
+      } else {
+        conceptListHtml = concepts.map(c => {
+          const pct = Math.round(c.accuracy * 100);
+          let barColor = 'var(--success)';
+          if (c.accuracy < 0.5) barColor = 'var(--danger)';
+          else if (c.accuracy < 0.7) barColor = 'var(--warning)';
+
+          return `
+            <div class="concept-bar-wrap">
+              <div class="concept-bar-info">
+                <span style="font-weight: 600; text-transform: capitalize;">
+                  ${esc(c.concept)}
+                  ${c.isGap ? '<span class="badge" style="background: var(--danger-light); color: var(--danger); font-size: 0.68rem; margin-left: 4px;">Gap (&lt;70%)</span>' : ''}
+                </span>
+                <span style="font-family: var(--font-mono); font-weight: 600; font-size: 0.75rem;">
+                  ${pct}% (${c.hit}/${c.total})
+                </span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill" style="width: ${pct}%; background: ${barColor};"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      let recBoxHtml = '';
+      if (!nextRecommendation || !nextRecommendation.lesson) {
+        recBoxHtml = `
+          <div class="card empty-state">
+            <p>Add lessons in <strong>${esc(S.domain)}</strong> to enable recommendations.</p>
+          </div>
+        `;
+      } else {
+        const rec = nextRecommendation.lesson;
+        recBoxHtml = `
+          <div class="rec-box">
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span class="badge badge-domain">${esc(rec.domain)}</span>
+              <span class="badge" style="background: rgba(37,99,235,0.15); color: var(--primary);">Recommended</span>
+              ${rec.w ? '<span class="badge badge-watched">Completed (Review)</span>' : '<span class="badge">Unwatched</span>'}
+            </div>
+
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main);">
+              ${esc(rec.title)}
+            </h3>
+
+            <p style="font-size: 0.825rem; color: var(--text-secondary); line-height: 1.45;">
+              ${esc(nextRecommendation.reason)}
+            </p>
+
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              ${rec.tags.map(t => `<span class="badge">#${esc(t)}</span>`).join('')}
+            </div>
+
+            <div style="margin-top: 6px;">
+              <button class="btn btn-primary" onclick="selectLesson('${rec.id}'); navigateTab('learn');">
+                Open Lesson Now
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div style="max-width: 1000px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 18px;">
+          <div>
+            <h2 style="font-size: 1.35rem; font-weight: 700;">Knowledge Gaps & Next Best Lesson</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              The Next Best Lesson engine prioritizes lessons that cover concepts where your quiz accuracy is below 70%.
+            </p>
+          </div>
+
+          <div class="gaps-grid">
+            <div class="card">
+              <div class="card-title">
+                <span>Concept Accuracy Breakdown</span>
+                <span class="badge">${concepts.length} tracked</span>
+              </div>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 12px;">
+                Ordered weakest first. Concepts under 70% threshold are flagged as gaps.
+              </p>
+              ${conceptListHtml}
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              ${recBoxHtml}
+
+              <div class="card" style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45;">
+                <div style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Ranking Logic</div>
+                <p>1. Candidates filtered by current subject (unwatched first).</p>
+                <p>2. Score = ∑ (1 - accuracy) for weak concepts matching title, tags, and transcript.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ----------------------------------------------------
+       View: Progress (Dashboard + Chart + Milestones)
+       ---------------------------------------------------- */
+    function renderProgressView() {
+      const totalLessons = S.v.length;
+      const watchedCount = S.v.filter(v => v.w).length;
+      const totalQuizzes = S.q.length;
+
+      let avgScore = 0;
+      if (totalQuizzes > 0) {
+        const sumPct = S.q.reduce((acc, q) => acc + (q.s / q.n), 0);
+        avgScore = Math.round((sumPct / totalQuizzes) * 100);
+      }
+
+      const last12 = S.q.slice(-12);
+      let chartHtml = '';
+      if (last12.length === 0) {
+        chartHtml = `
+          <div style="height: 100%; display: flex; align-items: center; justify-content: center; width: 100%; color: var(--text-muted); font-size: 0.8rem;">
+            No quiz scores recorded yet. Submit a quiz to populate this graph!
+          </div>
+        `;
+      } else {
+        chartHtml = last12.map(item => {
+          const pct = Math.round((item.s / item.n) * 100);
+          let barColor = 'var(--primary)';
+          if (pct < 50) barColor = 'var(--danger)';
+          else if (pct >= 80) barColor = 'var(--success)';
+
+          return `
+            <div class="score-bar-col">
+              <span class="score-bar-pct">${pct}%</span>
+              <div class="score-bar" style="height: ${Math.max(pct, 10)}%; background: ${barColor};" title="${item.s}/${item.n} on ${new Date(item.at).toLocaleDateString()}"></div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const milestones = [
+        { id: 'm1', icon: '🎯', label: 'First lesson watched', condition: watchedCount >= 1, progressText: `${Math.min(watchedCount, 1)} / 1` },
+        { id: 'm2', icon: '✍️', label: 'First quiz taken', condition: totalQuizzes >= 1, progressText: `${Math.min(totalQuizzes, 1)} / 1` },
+        { id: 'm3', icon: '⏱️', label: '1 hour focused', condition: S.secs >= 3600, progressText: `${Math.floor(S.secs / 60)} / 60 mins` },
+        { id: 'm4', icon: '🏆', label: '5 quizzes done', condition: totalQuizzes >= 5, progressText: `${Math.min(totalQuizzes, 5)} / 5` },
+        { id: 'm5', icon: '⭐', label: '80% average score', condition: totalQuizzes >= 3 && avgScore >= 80, progressText: totalQuizzes < 3 ? `Need 3 quizzes (have ${totalQuizzes})` : `${avgScore}% avg` },
+        { id: 'm6', icon: '🎓', label: '10 lessons watched', condition: watchedCount >= 10, progressText: `${Math.min(watchedCount, 10)} / 10` }
+      ];
+
+      const milestonesHtml = milestones.map(m => `
+        <div class="milestone-item ${m.condition ? 'unlocked' : ''}">
+          <div class="milestone-icon">${m.icon}</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.825rem; font-weight: 700; color: var(--text-main);">${m.label}</div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary);">${m.progressText}</div>
+          </div>
+          ${m.condition ? `
+            <span class="badge" style="background: var(--success); color: white; border: none; font-size: 0.68rem;">Unlocked</span>
+          ` : `
+            <span class="badge" style="font-size: 0.68rem;">In Progress</span>
+          `}
+        </div>
+      `).join('');
+
+      return `
+        <div style="max-width: 1000px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 18px;">
+          <div>
+            <h2 style="font-size: 1.35rem; font-weight: 700;">Learning Progress Dashboard</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              Review your cumulative study hours, completion rates, quiz score trends, and achievement milestones.
+            </p>
+          </div>
+
+          <div class="progress-stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Total Time Focused</span>
+              <span class="stat-value">${formatTimeHoursMins(S.secs)}</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);">Active focus timer</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Lessons Watched</span>
+              <span class="stat-value">${watchedCount} <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 400;">/ ${totalLessons}</span></span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);">${totalLessons > 0 ? Math.round((watchedCount / totalLessons) * 100) : 0}% completion</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Quizzes Completed</span>
+              <span class="stat-value">${totalQuizzes}</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);">Evaluated submissions</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Average Quiz Score</span>
+              <span class="stat-value" style="color: ${avgScore >= 70 ? 'var(--success)' : 'var(--warning)'};">${avgScore}%</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);">Overall average</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>Recent Quiz Scores (Last 12 attempts)</span>
+              <span class="badge">Percent Accuracy</span>
+            </div>
+            <div class="scores-chart">
+              ${chartHtml}
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>Study Milestones</span>
+              <span class="badge">${milestones.filter(m => m.condition).length} / ${milestones.length} Completed</span>
+            </div>
+            <div class="milestones-grid">
+              ${milestonesHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initialize application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      render();
+    });
+  </script>
+</body>
+</html>
